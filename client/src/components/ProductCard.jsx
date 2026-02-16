@@ -12,7 +12,7 @@ const ProductCard = ({ product }) => {
         <img
           src={product.images[0]}
           alt={product.name}
-          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-48 sm:h-64 object-cover group-hover:scale-105 transition-transform duration-500"
         />
         {product.oldPrice && (
           <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">

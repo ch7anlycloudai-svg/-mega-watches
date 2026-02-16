@@ -74,7 +74,7 @@ const ProductDetails = () => {
                 <img
                   src={product.images[selectedImage]}
                   alt={product.name}
-                  className="w-full h-80 lg:h-[450px] object-cover"
+                  className="w-full h-60 sm:h-80 lg:h-[450px] object-cover"
                 />
                 {product.oldPrice && (
                   <span className="absolute top-4 left-4 bg-red-500 text-white text-sm font-bold px-4 py-1.5 rounded-full">
@@ -82,12 +82,12 @@ const ProductDetails = () => {
                   </span>
                 )}
               </div>
-              <div className="flex gap-3">
+              <div className="flex gap-2 sm:gap-3 overflow-x-auto">
                 {product.images.map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors cursor-pointer ${
+                    className={`w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 transition-colors cursor-pointer shrink-0 ${
                       selectedImage === index ? "border-accent" : "border-transparent"
                     }`}
                   >
@@ -100,7 +100,7 @@ const ProductDetails = () => {
             {/* Info */}
             <div className="p-6 lg:p-8 flex flex-col">
               <span className="text-accent font-semibold text-sm">{product.brand}</span>
-              <h1 className="text-2xl lg:text-3xl font-extrabold text-primary mt-2">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-primary mt-2">
                 {product.name}
               </h1>
               <p className="text-sm text-gray-400 mt-1">{product.nameEn}</p>
@@ -123,8 +123,8 @@ const ProductDetails = () => {
               </div>
 
               {/* Price */}
-              <div className="mt-6 flex items-center gap-3">
-                <span className="text-3xl font-extrabold text-primary">
+              <div className="mt-4 sm:mt-6 flex items-center gap-2 sm:gap-3 flex-wrap">
+                <span className="text-2xl sm:text-3xl font-extrabold text-primary">
                   {formatPrice(product.price)}
                 </span>
                 {product.oldPrice && (
@@ -140,7 +140,7 @@ const ProductDetails = () => {
               {/* Features */}
               <div className="mt-6">
                 <h3 className="font-bold text-primary mb-3">المميزات</h3>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {product.features.map((feature, index) => (
                     <div key={index} className="flex items-center gap-2 text-sm text-gray-600">
                       <svg className="w-4 h-4 text-accent shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

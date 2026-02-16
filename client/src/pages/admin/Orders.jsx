@@ -51,8 +51,8 @@ export default function Orders() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">الطلبات</h1>
-        <p className="text-gray-500 mt-1">{orders.length} طلب</p>
+        <h1 className="text-xl sm:text-2xl font-bold text-white">الطلبات</h1>
+        <p className="text-gray-500 mt-1 text-sm sm:text-base">{orders.length} طلب</p>
       </div>
 
       {error && (
@@ -69,9 +69,9 @@ export default function Orders() {
           { label: "قيد التوصيل", count: orders.filter((o) => o.status === "قيد التوصيل").length, color: "text-blue-400" },
           { label: "مكتمل", count: orders.filter((o) => o.status === "مكتمل").length, color: "text-green-400" },
         ].map((item) => (
-          <div key={item.label} className="bg-[#0f0f1e] border border-gold/10 rounded-xl p-4 text-center">
-            <p className={`text-2xl font-bold ${item.color}`}>{item.count}</p>
-            <p className="text-gray-500 text-sm mt-1">{item.label}</p>
+          <div key={item.label} className="bg-[#0f0f1e] border border-gold/10 rounded-xl p-3 sm:p-4 text-center">
+            <p className={`text-xl sm:text-2xl font-bold ${item.color}`}>{item.count}</p>
+            <p className="text-gray-500 text-xs sm:text-sm mt-1">{item.label}</p>
           </div>
         ))}
       </div>

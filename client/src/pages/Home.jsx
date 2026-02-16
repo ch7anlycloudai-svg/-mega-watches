@@ -21,29 +21,29 @@ const Home = () => {
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-gradient-to-l from-accent/20 to-transparent" />
         </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 md:py-32 relative">
           <div className="max-w-2xl">
-            <span className="inline-block bg-accent/20 text-accent px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
+            <span className="inline-block bg-accent/20 text-accent px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
               أفضل الساعات العالمية
             </span>
-            <h1 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold leading-tight mb-4 sm:mb-6">
               اكتشف عالم
               <br />
               <span className="text-accent">الساعات الفاخرة</span>
             </h1>
-            <p className="text-lg text-gray-300 mb-8 leading-relaxed">
+            <p className="text-base sm:text-lg text-gray-300 mb-6 sm:mb-8 leading-relaxed">
               تشكيلة حصرية من أرقى الساعات العالمية. اختر ساعتك المثالية من بين أفضل العلامات التجارية بأسعار تنافسية بالأوقية الموريتانية.
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3 sm:gap-4">
               <Link
                 to="/shop"
-                className="bg-accent hover:bg-accent-dark text-primary font-bold px-8 py-3 rounded-xl transition-colors duration-200"
+                className="bg-accent hover:bg-accent-dark text-primary font-bold px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl transition-colors duration-200 text-sm sm:text-base"
               >
                 تسوق الآن
               </Link>
               <Link
                 to="/shop"
-                className="border-2 border-white/30 hover:border-accent text-white hover:text-accent font-bold px-8 py-3 rounded-xl transition-colors duration-200"
+                className="border-2 border-white/30 hover:border-accent text-white hover:text-accent font-bold px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl transition-colors duration-200 text-sm sm:text-base"
               >
                 عرض المجموعة
               </Link>
@@ -92,9 +92,9 @@ const Home = () => {
       {/* Featured Products */}
       <section className="py-16 bg-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-extrabold text-primary">منتجات مميزة</h2>
-            <p className="text-gray-500 mt-2">اكتشف أفضل ساعاتنا المختارة بعناية</p>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-primary">منتجات مميزة</h2>
+            <p className="text-gray-500 mt-2 text-sm sm:text-base">اكتشف أفضل ساعاتنا المختارة بعناية</p>
             <div className="w-20 h-1 bg-accent mx-auto mt-4 rounded-full" />
           </div>
 
@@ -122,12 +122,12 @@ const Home = () => {
       </section>
 
       {/* CTA Banner */}
-      <section className="bg-primary py-16">
+      <section className="bg-primary py-10 sm:py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-extrabold text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-3 sm:mb-4">
             اشترك في نشرتنا البريدية
           </h2>
-          <p className="text-gray-300 mb-8">
+          <p className="text-gray-300 mb-6 sm:mb-8 text-sm sm:text-base">
             كن أول من يعرف عن العروض الحصرية والمنتجات الجديدة
           </p>
           <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">

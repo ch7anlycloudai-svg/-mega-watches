@@ -91,8 +91,8 @@ const Checkout = () => {
 
   return (
     <div className="bg-light min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-2xl font-extrabold text-primary mb-8">إتمام الشراء</h1>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <h1 className="text-xl sm:text-2xl font-extrabold text-primary mb-6 sm:mb-8">إتمام الشراء</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Form */}

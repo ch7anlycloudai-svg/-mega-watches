@@ -165,40 +165,40 @@ export default function Analytics() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">التحليلات</h1>
-        <p className="text-gray-500 mt-1">إحصائيات وتقارير المتجر</p>
+        <h1 className="text-xl sm:text-2xl font-bold text-white">التحليلات</h1>
+        <p className="text-gray-500 mt-1 text-sm sm:text-base">إحصائيات وتقارير المتجر</p>
       </div>
 
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Sales */}
-        <div className="bg-[#0f0f1e] border border-gold/10 rounded-xl p-6">
-          <h3 className="text-lg font-bold text-white mb-4">المبيعات الشهرية</h3>
-          <div className="h-72">
+        <div className="bg-[#0f0f1e] border border-gold/10 rounded-xl p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-bold text-white mb-4">المبيعات الشهرية</h3>
+          <div className="h-56 sm:h-72">
             <Bar data={monthlySalesData} options={chartDefaults} />
           </div>
         </div>
 
         {/* Daily Revenue */}
-        <div className="bg-[#0f0f1e] border border-gold/10 rounded-xl p-6">
-          <h3 className="text-lg font-bold text-white mb-4">الإيرادات اليومية</h3>
-          <div className="h-72">
+        <div className="bg-[#0f0f1e] border border-gold/10 rounded-xl p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-bold text-white mb-4">الإيرادات اليومية</h3>
+          <div className="h-56 sm:h-72">
             <Line data={dailyRevenueData} options={chartDefaults} />
           </div>
         </div>
 
         {/* Category Distribution */}
-        <div className="bg-[#0f0f1e] border border-gold/10 rounded-xl p-6">
-          <h3 className="text-lg font-bold text-white mb-4">توزيع الفئات</h3>
-          <div className="h-72">
+        <div className="bg-[#0f0f1e] border border-gold/10 rounded-xl p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-bold text-white mb-4">توزيع الفئات</h3>
+          <div className="h-56 sm:h-72">
             <Doughnut data={categoryData} options={doughnutOptions} />
           </div>
         </div>
 
         {/* Order Status */}
-        <div className="bg-[#0f0f1e] border border-gold/10 rounded-xl p-6">
-          <h3 className="text-lg font-bold text-white mb-4">حالة الطلبات</h3>
-          <div className="h-72">
+        <div className="bg-[#0f0f1e] border border-gold/10 rounded-xl p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-bold text-white mb-4">حالة الطلبات</h3>
+          <div className="h-56 sm:h-72">
             <Doughnut data={orderStatusData} options={doughnutOptions} />
           </div>
         </div>

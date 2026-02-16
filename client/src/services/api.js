@@ -1,14 +1,25 @@
-const API_URL = "/api";
+const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 // Helper for fetch with error handling
 const fetchApi = async (url, options = {}) => {
-  const res = await fetch(`${API_URL}${url}`, {
-    headers: { "Content-Type": "application/json", ...options.headers },
-    ...options,
-  });
+  let res;
+  try {
+    res = await fetch(`${API_URL}${url}`, {
+      headers: { "Content-Type": "application/json", ...options.headers },
+      ...options,
+    });
+  } catch {
+    throw new Error("لا يمكن الاتصال بالخادم. تأكد أن الخادم يعمل.");
+  }
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ message: "خطأ في الاتصال بالخادم" }));
-    throw new Error(error.message);
+    const text = await res.text();
+    try {
+      const error = JSON.parse(text);
+      throw new Error(error.message);
+    } catch (e) {
+      if (e.message && !e.message.includes("JSON")) throw e;
+      throw new Error(`خطأ من الخادم (${res.status})`);
+    }
   }
   return res.json();
 };

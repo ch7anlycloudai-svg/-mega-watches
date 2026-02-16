@@ -38,26 +38,39 @@ const PORT = process.env.PORT || 5000;
 
 async function start() {
   let mongoUri = process.env.MONGODB_URI;
+  let connected = false;
 
   // Try connecting to external MongoDB first
   try {
     await mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 3000 });
     console.log("Connected to MongoDB at", mongoUri);
-  } catch {
-    // Fallback to in-memory MongoDB
-    console.log("External MongoDB not available, starting in-memory server...");
-    const { MongoMemoryServer } = require("mongodb-memory-server");
-    const mongod = await MongoMemoryServer.create();
-    mongoUri = mongod.getUri();
-    await mongoose.connect(mongoUri);
-    console.log("Connected to in-memory MongoDB");
+    connected = true;
+  } catch (err) {
+    console.log("External MongoDB not available:", err.message);
+  }
 
-    // Auto-seed when using in-memory
-    await seedData();
+  // Fallback to in-memory MongoDB (dev/local only)
+  if (!connected) {
+    try {
+      console.log("Trying in-memory MongoDB fallback...");
+      const { MongoMemoryServer } = require("mongodb-memory-server");
+      const mongod = await MongoMemoryServer.create();
+      mongoUri = mongod.getUri();
+      await mongoose.connect(mongoUri);
+      console.log("Connected to in-memory MongoDB");
+      connected = true;
+
+      // Auto-seed when using in-memory
+      await seedData();
+    } catch (err) {
+      console.error("In-memory MongoDB also failed:", err.message);
+      console.error("Server will start WITHOUT database. Set MONGODB_URI to a valid MongoDB connection string.");
+    }
   }
 
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
+    if (!connected) console.log("WARNING: No database connected!");
   });
 }
 

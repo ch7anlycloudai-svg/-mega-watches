@@ -1,6 +1,9 @@
 RewriteEngine On
 RewriteBase /
 
+# Skip API requests — let them pass through to the Node.js backend
+RewriteRule ^api(/|$) - [L]
+
 # If the requested resource is not a real file
 RewriteCond %{REQUEST_FILENAME} !-f
 # If the requested resource is not a real directory

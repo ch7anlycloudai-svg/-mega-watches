@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
-require("dotenv").config();
+require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 const productRoutes = require("./routes/products");
 const orderRoutes = require("./routes/orders");
@@ -28,10 +28,15 @@ app.get("/api/health", (req, res) => {
 });
 
 // Serve frontend in production
-const distPath = path.join(__dirname, "../client/dist");
+const distPath = path.resolve(__dirname, "../client/dist");
 app.use(express.static(distPath));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(distPath, "index.html"));
+  const indexFile = path.join(distPath, "index.html");
+  res.sendFile(indexFile, (err) => {
+    if (err) {
+      res.status(500).send("Frontend not found. Run: cd client && npm run build");
+    }
+  });
 });
 
 const PORT = process.env.PORT || 5000;

@@ -11,6 +11,9 @@ const authRoutes = require("./routes/auth");
 
 const app = express();
 
+// Debug: test if Node.js is handling requests at all
+app.get("/ping", (req, res) => res.send("pong from node"));
+
 // CORS
 app.use(cors({
   origin: process.env.CORS_ORIGIN || "*",

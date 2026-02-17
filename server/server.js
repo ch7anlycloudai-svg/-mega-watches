@@ -26,21 +26,21 @@ if (fs.existsSync(distPath)) {
 }
 
 // JSON parsing for API routes
-app.use("/api", express.json());
+app.use("/backend", express.json());
 
 // API Routes
-app.use("/api/products", productRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/auth", authRoutes);
+app.use("/backend/products", productRoutes);
+app.use("/backend/orders", orderRoutes);
+app.use("/backend/auth", authRoutes);
 
 // Health check
-app.get("/api/health", (req, res) => {
+app.get("/backend/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
 });
 
 // SPA fallback — serve index.html for all non-API routes
 app.use((req, res) => {
-  if (req.path.startsWith("/api")) {
+  if (req.path.startsWith("/backend")) {
     return res.status(404).json({ message: "API endpoint not found" });
   }
   if (fs.existsSync(indexFile)) {

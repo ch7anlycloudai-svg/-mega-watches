@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+const fs = require("fs");
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 const productRoutes = require("./routes/products");
@@ -10,12 +11,22 @@ const authRoutes = require("./routes/auth");
 
 const app = express();
 
-// Middleware
+// CORS
 app.use(cors({
   origin: process.env.CORS_ORIGIN || "*",
   credentials: true,
 }));
-app.use(express.json());
+
+// Serve frontend static files FIRST (before API routes)
+const distPath = path.join(__dirname, "..", "client", "dist");
+const indexFile = path.join(distPath, "index.html");
+
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+}
+
+// JSON parsing for API routes
+app.use("/api", express.json());
 
 // API Routes
 app.use("/api/products", productRoutes);
@@ -27,16 +38,16 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
 });
 
-// Serve frontend in production
-const distPath = path.resolve(__dirname, "../client/dist");
-app.use(express.static(distPath));
-app.get("*", (req, res) => {
-  const indexFile = path.join(distPath, "index.html");
-  res.sendFile(indexFile, (err) => {
-    if (err) {
-      res.status(500).send("Frontend not found. Run: cd client && npm run build");
-    }
-  });
+// SPA fallback — serve index.html for all non-API routes
+app.use((req, res) => {
+  if (req.path.startsWith("/api")) {
+    return res.status(404).json({ message: "API endpoint not found" });
+  }
+  if (fs.existsSync(indexFile)) {
+    res.sendFile(indexFile);
+  } else {
+    res.status(500).send("Frontend not built. Run: cd client && npm run build");
+  }
 });
 
 const PORT = process.env.PORT || 5000;

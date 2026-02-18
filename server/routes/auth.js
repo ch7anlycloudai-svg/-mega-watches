@@ -4,12 +4,12 @@ const Admin = require("../models/Admin");
 
 const router = express.Router();
 
-// POST /api/auth/login
+// POST /backend/auth/login
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const admin = await Admin.findOne({ email });
+    const admin = await Admin.findOne({ where: { email } });
     if (!admin) {
       return res.status(401).json({ message: "بيانات الدخول غير صحيحة" });
     }
@@ -20,7 +20,7 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: admin._id, email: admin.email, role: admin.role },
+      { id: admin.id, email: admin.email, role: admin.role },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -34,7 +34,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// GET /api/auth/me
+// GET /backend/auth/me
 router.get("/me", async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
@@ -42,7 +42,7 @@ router.get("/me", async (req, res) => {
 
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const admin = await Admin.findById(decoded.id).select("-password");
+    const admin = await Admin.findByPk(decoded.id);
     if (!admin) return res.status(401).json({ message: "غير مصرح" });
 
     res.json({ admin: { name: admin.name, email: admin.email, role: admin.role } });

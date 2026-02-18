@@ -1,21 +1,31 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
 
-const productSchema = new mongoose.Schema(
+const Product = sequelize.define(
+  "Product",
   {
-    name: { type: String, required: true },
-    nameEn: { type: String, default: "" },
-    brand: { type: String, default: "" },
-    category: { type: String, required: true },
-    price: { type: Number, required: true },
-    oldPrice: { type: Number, default: null },
-    description: { type: String, default: "" },
-    features: [{ type: String }],
-    images: [{ type: String }],
-    inStock: { type: Boolean, default: true },
-    featured: { type: Boolean, default: false },
-    rating: { type: Number, default: 0 },
+    name: { type: DataTypes.STRING, allowNull: false },
+    nameEn: { type: DataTypes.STRING, defaultValue: "" },
+    brand: { type: DataTypes.STRING, defaultValue: "" },
+    category: { type: DataTypes.STRING, allowNull: false },
+    price: { type: DataTypes.FLOAT, allowNull: false },
+    oldPrice: { type: DataTypes.FLOAT, defaultValue: null },
+    description: { type: DataTypes.TEXT, defaultValue: "" },
+    features: { type: DataTypes.JSON, defaultValue: [] },
+    images: { type: DataTypes.JSON, defaultValue: [] },
+    inStock: { type: DataTypes.BOOLEAN, defaultValue: true },
+    featured: { type: DataTypes.BOOLEAN, defaultValue: false },
+    rating: { type: DataTypes.FLOAT, defaultValue: 0 },
   },
-  { timestamps: true }
+  {
+    tableName: "products",
+  }
 );
 
-module.exports = mongoose.model("Product", productSchema);
+Product.prototype.toJSON = function () {
+  const values = { ...this.get() };
+  values._id = String(values.id);
+  return values;
+};
+
+module.exports = Product;

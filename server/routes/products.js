@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const { fn, col } = require("sequelize");
 const Product = require("../models/Product");
 
 const router = express.Router();
@@ -21,40 +22,44 @@ const authMiddleware = (req, res, next) => {
 
 // ============ PUBLIC ROUTES ============
 
-// GET /api/products
+// GET /backend/products
 router.get("/", async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const products = await Product.findAll({ order: [["createdAt", "DESC"]] });
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: "خطأ في جلب المنتجات" });
   }
 });
 
-// GET /api/products/featured
+// GET /backend/products/featured
 router.get("/featured", async (req, res) => {
   try {
-    const products = await Product.find({ featured: true });
+    const products = await Product.findAll({ where: { featured: true } });
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: "خطأ في جلب المنتجات المميزة" });
   }
 });
 
-// GET /api/products/categories
+// GET /backend/products/categories
 router.get("/categories", async (req, res) => {
   try {
-    const categories = await Product.distinct("category");
+    const results = await Product.findAll({
+      attributes: [[fn("DISTINCT", col("category")), "category"]],
+      raw: true,
+    });
+    const categories = results.map((r) => r.category);
     res.json(["الكل", ...categories]);
   } catch (error) {
     res.status(500).json({ message: "خطأ في جلب الفئات" });
   }
 });
 
-// GET /api/products/:id
+// GET /backend/products/:id
 router.get("/:id", async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findByPk(req.params.id);
     if (!product) return res.status(404).json({ message: "المنتج غير موجود" });
     res.json(product);
   } catch (error) {
@@ -64,36 +69,34 @@ router.get("/:id", async (req, res) => {
 
 // ============ ADMIN ROUTES (protected) ============
 
-// POST /api/products
+// POST /backend/products
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const product = new Product(req.body);
-    await product.save();
+    const product = await Product.create(req.body);
     res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ message: "خطأ في إنشاء المنتج" });
   }
 });
 
-// PUT /api/products/:id
+// PUT /backend/products/:id
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const product = await Product.findByPk(req.params.id);
     if (!product) return res.status(404).json({ message: "المنتج غير موجود" });
+    await product.update(req.body);
     res.json(product);
   } catch (error) {
     res.status(400).json({ message: "خطأ في تعديل المنتج" });
   }
 });
 
-// DELETE /api/products/:id
+// DELETE /backend/products/:id
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id);
+    const product = await Product.findByPk(req.params.id);
     if (!product) return res.status(404).json({ message: "المنتج غير موجود" });
+    await product.destroy();
     res.json({ message: "تم حذف المنتج بنجاح" });
   } catch (error) {
     res.status(500).json({ message: "خطأ في حذف المنتج" });

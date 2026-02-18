@@ -1,23 +1,39 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require("sequelize");
 const bcrypt = require("bcryptjs");
+const sequelize = require("../config/database");
 
-const adminSchema = new mongoose.Schema(
+const Admin = sequelize.define(
+  "Admin",
   {
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    role: { type: String, default: "admin" },
+    name: { type: DataTypes.STRING, allowNull: false },
+    email: { type: DataTypes.STRING, allowNull: false, unique: true },
+    password: { type: DataTypes.STRING, allowNull: false },
+    role: { type: DataTypes.STRING, defaultValue: "admin" },
   },
-  { timestamps: true }
+  {
+    tableName: "admins",
+    hooks: {
+      beforeCreate: async (admin) => {
+        admin.password = await bcrypt.hash(admin.password, 10);
+      },
+      beforeUpdate: async (admin) => {
+        if (admin.changed("password")) {
+          admin.password = await bcrypt.hash(admin.password, 10);
+        }
+      },
+    },
+  }
 );
 
-adminSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-  this.password = await bcrypt.hash(this.password, 10);
-});
-
-adminSchema.methods.comparePassword = async function (candidatePassword) {
+Admin.prototype.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-module.exports = mongoose.model("Admin", adminSchema);
+Admin.prototype.toJSON = function () {
+  const values = { ...this.get() };
+  values._id = String(values.id);
+  delete values.password;
+  return values;
+};
+
+module.exports = Admin;

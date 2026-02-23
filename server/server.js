@@ -59,7 +59,8 @@ const PORT = process.env.PORT || 5000;
 async function start() {
   try {
     await sequelize.authenticate();
-    console.log("Connected to MySQL");
+    console.log("Connected to DB:", process.env.DB_DIALECT || "sqlite",
+      process.env.DB_DIALECT === "mysql" ? `(${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME})` : "");
 
     await sequelize.sync();
     console.log("Database tables synced");
@@ -72,7 +73,8 @@ async function start() {
     }
   } catch (err) {
     console.error("Database connection failed:", err.message);
-    console.error("Server will start WITHOUT database. Set DB_HOST, DB_NAME, DB_USER, DB_PASS in .env");
+    if (err.original) console.error("  Detail:", err.original.message);
+    console.error("Server will start WITHOUT database. Check .env: DB_HOST, DB_NAME, DB_USER, DB_PASS");
   }
 
   app.listen(PORT, "0.0.0.0", () => {

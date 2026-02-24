@@ -21,18 +21,10 @@ app.use(cors({
   credentials: true,
 }));
 
-// Serve frontend static files FIRST (before API routes)
-const distPath = path.join(__dirname, "..", "client", "dist");
-const indexFile = path.join(distPath, "index.html");
-
-if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath));
-}
-
 // JSON parsing for API routes
 app.use("/backend", express.json());
 
-// API Routes
+// API Routes (BEFORE static files)
 app.use("/backend/products", productRoutes);
 app.use("/backend/orders", orderRoutes);
 app.use("/backend/auth", authRoutes);
@@ -42,7 +34,15 @@ app.get("/backend/health", (req, res) => {
   res.json({ status: "ok", time: new Date().toISOString() });
 });
 
-// SPA fallback — serve index.html for all non-API routes
+// Serve frontend static files AFTER API routes
+const distPath = path.join(__dirname, "..", "client", "dist");
+const indexFile = path.join(distPath, "index.html");
+
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+}
+
+// SPA fallback — serve index.html for all non-API routes (LAST)
 app.use((req, res) => {
   if (req.path.startsWith("/backend")) {
     return res.status(404).json({ message: "API endpoint not found" });
